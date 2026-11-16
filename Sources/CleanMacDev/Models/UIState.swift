@@ -20,12 +20,14 @@ enum SheetKind: Identifiable {
     case picker(String)
     case confirm
     case result
+    case processes
 
     var id: String {
         switch self {
         case .picker(let itemID): return "picker-\(itemID)"
         case .confirm: return "confirm"
         case .result: return "result"
+        case .processes: return "processes"
         }
     }
 }

@@ -1,4 +1,31 @@
+# Build output
 dist/
 build/
-.DS_Store
+.build/
+DerivedData/
+*.app
+*.dmg
+*.zip
+
+# Swift Package Manager / Xcode
+.swiftpm/
+Package.resolved
+xcuserdata/
 *.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# macOS
+.DS_Store
+._*
+
+# Local env and logs
+.env
+.env.*
+*.log

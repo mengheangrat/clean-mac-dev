@@ -61,6 +61,9 @@ struct HeaderCard: View {
             }
             .disabled(model.isBusy)
             .padding(.top, 4)
+            Button { model.activeSheet = .processes } label: {
+                Label("Heavy processes", systemImage: "gauge.with.dots.needle.67percent")
+            }
         }
     }
 }

@@ -31,6 +31,8 @@ struct ContentView: View {
             ConfirmSheet()
         case .result:
             ResultSheet()
+        case .processes:
+            ProcessSheet()
         }
     }
 }
