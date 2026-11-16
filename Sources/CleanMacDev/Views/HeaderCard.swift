@@ -64,6 +64,9 @@ struct HeaderCard: View {
             Button { model.activeSheet = .processes } label: {
                 Label("Heavy processes", systemImage: "gauge.with.dots.needle.67percent")
             }
+            Button { model.activeSheet = .security } label: {
+                Label("Security check", systemImage: "checkmark.shield")
+            }
         }
     }
 }

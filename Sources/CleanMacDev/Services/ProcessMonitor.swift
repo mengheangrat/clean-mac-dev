@@ -6,6 +6,7 @@ struct RunningProcess: Identifiable {
     let name: String
     let cpu: Double
     let memory: Int64
+    var energy: Double = 0
 }
 
 /// Lists the user's processes with their CPU and memory use, and stops them.
@@ -14,7 +15,24 @@ enum ProcessMonitor {
     static func list() -> [RunningProcess] {
         let output = Shell.run("/bin/ps", ["-xco", "pid=,pcpu=,rss=,comm="]).output
         let me = ProcessInfo.processInfo.processIdentifier
-        return output.split(separator: "\n").compactMap { parse($0) }.filter { $0.id != me }
+        let energy = energyImpact()
+        return output.split(separator: "\n").compactMap { parse($0) }.filter { $0.id != me }.map {
+            var process = $0
+            process.energy = energy[process.id] ?? 0
+            return process
+        }
+    }
+
+    /// Energy Impact per pid, the same number Activity Monitor shows. `top`'s first sample is always 0, so take the second.
+    static func energyImpact() -> [pid_t: Double] {
+        let output = Shell.run("/usr/bin/top", ["-l", "2", "-s", "1", "-stats", "pid,power"]).output
+        guard let lastSample = output.components(separatedBy: "PID").last else { return [:] }
+        var result: [pid_t: Double] = [:]
+        for line in lastSample.split(separator: "\n") {
+            let fields = line.split(separator: " ")
+            if fields.count == 2, let pid = pid_t(fields[0]), let power = Double(fields[1]) { result[pid] = power }
+        }
+        return result
     }
 
     /// Parses one `ps` line: "  pid  cpu  rssKB  name with spaces".

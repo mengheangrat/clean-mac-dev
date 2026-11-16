@@ -4,10 +4,18 @@ import SwiftUI
 struct ProcessSheet: View {
     @EnvironmentObject var model: AppModel
     @State private var processes: [RunningProcess] = []
-    @State private var sortByMemory = false
+    @State private var sort = SortKey.cpu
+
+    private enum SortKey { case cpu, memory, energy }
 
     private var top: [RunningProcess] {
-        let sorted = processes.sorted { sortByMemory ? $0.memory > $1.memory : $0.cpu > $1.cpu }
+        let sorted = processes.sorted {
+            switch sort {
+            case .cpu: return $0.cpu > $1.cpu
+            case .memory: return $0.memory > $1.memory
+            case .energy: return $0.energy > $1.energy
+            }
+        }
         return Array(sorted.prefix(20))
     }
 
@@ -22,13 +30,14 @@ struct ProcessSheet: View {
                         .foregroundColor(.secondary)
                 }
                 Spacer()
-                Picker("Sort by", selection: $sortByMemory) {
-                    Text("CPU").tag(false)
-                    Text("Memory").tag(true)
+                Picker("Sort by", selection: $sort) {
+                    Text("CPU").tag(SortKey.cpu)
+                    Text("Memory").tag(SortKey.memory)
+                    Text("Energy").tag(SortKey.energy)
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
-                .frame(width: 160)
+                .frame(width: 220)
             }
 
             Card {
@@ -54,7 +63,7 @@ struct ProcessSheet: View {
             }
         }
         .padding(24)
-        .frame(width: 560)
+        .frame(width: 620)
         .task {
             while !Task.isCancelled {
                 await refresh()
@@ -69,9 +78,12 @@ struct ProcessSheet: View {
                 .lineLimit(1)
                 .truncationMode(.middle)
             Spacer()
-            SizeText(text: String(format: "%.1f%%", process.cpu), isMuted: sortByMemory)
-            SizeText(text: process.memory.formattedBytes, isMuted: !sortByMemory)
+            SizeText(text: String(format: "%.1f%%", process.cpu), isMuted: sort != .cpu)
+            SizeText(text: process.memory.formattedBytes, isMuted: sort != .memory)
                 .frame(minWidth: 80, alignment: .trailing)
+            SizeText(text: String(format: "%.1f", process.energy), isMuted: sort != .energy)
+                .frame(minWidth: 44, alignment: .trailing)
+                .help("Energy Impact, as in Activity Monitor")
             Button("Stop") {
                 ProcessMonitor.stop(process.id)
                 Task { await refresh() }
