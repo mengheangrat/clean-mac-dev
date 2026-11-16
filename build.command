@@ -15,7 +15,7 @@ cd "$(dirname "$0")" || exit 1
 NAME="SomAt Dev - Clean Mac Dev"
 SHORT_NAME="Clean Mac Dev"
 EXE="CleanMacDev"
-VERSION="${VERSION:-1.0.0}"
+VERSION="${VERSION:-1.1.0}"
 BUNDLE_ID="dev.somat.cleanmacdev"
 NOTARY_PROFILE="CleanMacDev"
 DMG="CleanMacDev-$VERSION.dmg"

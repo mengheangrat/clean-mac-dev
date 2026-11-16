@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+- Process monitor: see running processes with CPU and memory usage.
+- Security check: scan for common security settings and issues.
+- Storage management: browse what is using disk space.
+
 ## 1.0.0
 
 First open-source release.
