@@ -22,6 +22,7 @@ enum SheetKind: Identifiable {
     case result
     case processes
     case security
+    case storage
 
     var id: String {
         switch self {
@@ -30,6 +31,7 @@ enum SheetKind: Identifiable {
         case .result: return "result"
         case .processes: return "processes"
         case .security: return "security"
+        case .storage: return "storage"
         }
     }
 }

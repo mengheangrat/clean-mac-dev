@@ -67,6 +67,9 @@ struct HeaderCard: View {
             Button { model.activeSheet = .security } label: {
                 Label("Security check", systemImage: "checkmark.shield")
             }
+            Button { model.activeSheet = .storage } label: {
+                Label("Storage breakdown", systemImage: "internaldrive")
+            }
         }
     }
 }

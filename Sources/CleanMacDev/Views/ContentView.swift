@@ -35,6 +35,8 @@ struct ContentView: View {
             ProcessSheet()
         case .security:
             SecuritySheet()
+        case .storage:
+            StorageSheet()
         }
     }
 }
