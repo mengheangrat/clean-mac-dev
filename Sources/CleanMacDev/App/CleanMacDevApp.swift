@@ -20,6 +20,8 @@ struct CleanMacDevApp: App {
             CommandGroup(replacing: .newItem) {
                 Button("Rescan") { model.scan() }
                     .keyboardShortcut("r")
+                Button("Security Check") { model.activeSheet = .security }
+                    .keyboardShortcut("k", modifiers: [.command, .shift])
             }
         }
     }

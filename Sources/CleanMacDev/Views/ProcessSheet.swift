@@ -4,6 +4,7 @@ import SwiftUI
 struct ProcessSheet: View {
     @EnvironmentObject var model: AppModel
     @State private var processes: [RunningProcess] = []
+    @State private var usage = SystemUsage()
     @State private var sort = SortKey.cpu
 
     private enum SortKey { case cpu, memory, energy }
@@ -38,6 +39,16 @@ struct ProcessSheet: View {
                 .pickerStyle(.segmented)
                 .labelsHidden()
                 .frame(width: 220)
+            }
+
+            Card {
+                VStack(spacing: 10) {
+                    usageRow("CPU", fraction: usage.cpu / 100, color: .orange,
+                             detail: String(format: "%.0f%% of %d cores", usage.cpu, usage.cores))
+                    usageRow("Memory", fraction: Double(usage.memoryUsed) / Double(usage.memoryTotal), color: .blue,
+                             detail: "\(usage.memoryUsed.formattedBytes) of \(usage.memoryTotal.formattedBytes)")
+                }
+                .padding(14)
             }
 
             Card {
@@ -93,8 +104,17 @@ struct ProcessSheet: View {
         .padding(.vertical, 8)
     }
 
+    private func usageRow(_ title: String, fraction: Double, color: Color, detail: String) -> some View {
+        HStack(spacing: 12) {
+            Text(title).frame(width: 60, alignment: .leading)
+            SizeBar(fraction: fraction, color: color)
+            SizeText(text: detail).frame(minWidth: 150, alignment: .trailing)
+        }
+    }
+
     private func refresh() async {
-        let list = await Task.detached { ProcessMonitor.list() }.value
-        processes = list
+        let result = await Task.detached { ProcessMonitor.list() }.value
+        processes = result.processes
+        usage = result.usage
     }
 }
