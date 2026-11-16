@@ -12,6 +12,12 @@
 
 Xcode, Android Studio, Docker, Gradle, npm and friends quietly fill your disk with caches, old simulators and emulator images. macOS lumps all of it into **"System Data"**, which makes it hard to see where the space went. Clean Mac Dev shows you, with sizes, and lets you clean it in a couple of clicks.
 
+## Screenshots
+
+![Main window: disk overview and caches](assets/screenshots/main.png)
+
+![Review screen before cleaning](assets/screenshots/review.png)
+
 ## Features
 
 - **Disk overview**: how full your disk is, and how much the app found to free.
