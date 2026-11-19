@@ -97,6 +97,6 @@ enum SecurityCheck {
         guard let file = FileHandle(forReadingAtPath: path) else { return false }
         let start = (try? file.read(upToCount: 2)) ?? Data()
         try? file.close()
-        return start != Data("#!".utf8) && !Shell.run("/usr/bin/codesign", ["--verify", path]).succeeded
+        return start != Data("#!".utf8) && !Shell.run("/usr/bin/codesign", ["--verify", "--", path]).succeeded
     }
 }
